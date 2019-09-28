@@ -5,5 +5,5 @@ module.exports = merge(devEnv, {
   NODE_ENV: '"testing"',
   SERVER_URI: '"http://localhost:8080"',
   WEBSOCKET_URI: '"ws://localhost:8080"',
-  APP_URI: '"http://localhost:3000"'
+  APP_URI: '"http://localhost:3001"'
 })

@@ -8,7 +8,7 @@ const routes = [
     component: Permissions,
     name: 'Permissions',
     meta: {
-      description: 'List of appy permissions',
+      description: 'List of mbt.guide permissions',
       title: 'Permissions',
       requiresAuth: true
     }

@@ -1,9 +1,9 @@
 {
-  "name": "appy",
+  "name": "mbt.guide admin",
   "version": "0.1.0",
-  "description": "A fully featured boilerplate web app.",
+  "description": "Admin app for mbt.guide",
   "author": "Justin Headley <headley.justin@gmail.com>",
-  "repository": "https://github.com/JKHeadley/appy",
+  "repository": "https://github.com/JKHeadley/mbt.guide-admin",
   "license": "MIT",
   "scripts": {
     "start": "npm run dev",

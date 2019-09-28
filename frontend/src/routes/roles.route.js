@@ -8,7 +8,7 @@ const routes = [
     component: Roles,
     name: 'Roles',
     meta: {
-      description: 'List of appy roles',
+      description: 'List of mbt.guide roles',
       title: 'Roles',
       requiresAuth: true
     }

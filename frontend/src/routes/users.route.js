@@ -8,7 +8,7 @@ const routes = [
     component: Users,
     name: 'Users',
     meta: {
-      description: 'List of appy users',
+      description: 'List of mbt.guide users',
       title: 'Users',
       requiresAuth: true
     }

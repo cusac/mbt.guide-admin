@@ -57,7 +57,7 @@ module.exports = {
   },
   dev: {
     env: devEnv,
-    port: 3000,
+    port: 3001,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},

@@ -8,7 +8,7 @@ const routes = [
     component: Groups,
     name: 'Groups',
     meta: {
-      description: 'List of appy groups',
+      description: 'List of mbt.guide groups',
       title: 'Groups',
       requiresAuth: true
     }

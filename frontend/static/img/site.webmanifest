@@ -1,6 +1,6 @@
 {
-    "name": "appy",
-    "short_name": "appy",
+    "name": "mbt.guide-admin",
+    "short_name": "mbt.guide-admin",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",

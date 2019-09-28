@@ -7,7 +7,7 @@ const routes = [
     component: Members,
     name: 'Members',
     meta: {
-      description: 'List of appy members',
+      description: 'List of mbt.guide members',
       title: 'Members',
       requiresAuth: true
     }
