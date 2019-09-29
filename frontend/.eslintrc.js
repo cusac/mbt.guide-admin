@@ -4,30 +4,22 @@ module.exports = {
   root: true,
   parser: 'babel-eslint',
   parserOptions: {
-    sourceType: 'module'
+    sourceType: 'module',
   },
   env: {
     browser: true,
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: ['prettier-standard'],
-  // required to lint *.vue files
-  plugins: [
-    'html',
-    'prettier'
-  ],
+  extends: ['plugin:prettier/recommended'],
+  // plugins: ['prettier'],
   // add your custom rules here
-  'rules': {
+  rules: {
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow async-await
     'generator-star-spacing': 0,
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'prettier/prettier': 'error',
   },
-  "globals": {
-    "$": false,
-    "ClassicEditor": false,
-    "Chart": false
-  }
-}
+};
