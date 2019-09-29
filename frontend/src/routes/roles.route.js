@@ -1,6 +1,6 @@
-import Roles from '../components/views/roles/Roles.vue'
-import RoleDetails from '../components/views/roles/RoleDetails.vue'
-import RoleCreate from '../components/views/roles/RoleCreate.vue'
+import Roles from '../components/views/roles/Roles.vue';
+import RoleDetails from '../components/views/roles/RoleDetails.vue';
+import RoleCreate from '../components/views/roles/RoleCreate.vue';
 
 const routes = [
   {
@@ -10,21 +10,21 @@ const routes = [
     meta: {
       description: 'List of mbt.guide roles',
       title: 'Roles',
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
     path: '/roles/:_id',
     beforeEnter: (to, from, next) => {
-      to.params._id === 'create' ? next({ name: 'RoleCreate' }) : next()
+      to.params._id === 'create' ? next({ name: 'RoleCreate' }) : next();
     },
     component: RoleDetails,
     name: 'RoleDetails',
     meta: {
       description: 'Details for the selected role',
       title: 'Role Details',
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
     path: '/roles/create',
@@ -33,9 +33,9 @@ const routes = [
     meta: {
       description: 'Create a new role',
       title: 'Role Create',
-      requiresAuth: true
-    }
-  }
-]
+      requiresAuth: true,
+    },
+  },
+];
 
-export default routes
+export default routes;

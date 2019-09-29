@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 export default {
   // serverURI: 'http://localhost:8080',
   // websocketURI: 'ws://localhost:8080',
@@ -9,8 +10,8 @@ export default {
   websocketURI: process.env.WEBSOCKET_URI,
   appURI: process.env.APP_URI,
   fixedLayout: false,
-  hideLogoOnMobile: false
-}
+  hideLogoOnMobile: false,
+};
 
 /**
  * Adding a property to this object will create a repository for that property.
@@ -21,132 +22,132 @@ export const resources = {
     alias: 'user',
     associations: {
       groups: {
-        alias: 'group'
+        alias: 'group',
       },
       permissions: {
-        alias: 'permission'
+        alias: 'permission',
       },
       connections: {
-        alias: 'connection'
+        alias: 'connection',
       },
       conversations: {
-        alias: 'conversation'
+        alias: 'conversation',
       },
       notifications: {
-        alias: 'notification'
+        alias: 'notification',
       },
       documents: {
-        alias: 'document'
+        alias: 'document',
       },
       sharedDocuments: {
-        alias: 'shared-document'
+        alias: 'shared-document',
       },
       images: {
-        alias: 'image'
-      }
-    }
+        alias: 'image',
+      },
+    },
   },
   conversation: {
-    alias: 'conversation'
+    alias: 'conversation',
   },
   notification: {
-    alias: 'notification'
+    alias: 'notification',
   },
   connection: {
-    alias: 'connection'
+    alias: 'connection',
   },
   auditLog: {
     alias: 'auditLog',
     options: {
-      filterDeleted: false
-    }
+      filterDeleted: false,
+    },
   },
   document: {
     alias: 'document',
     associations: {
       users: {
-        alias: 'user'
-      }
-    }
+        alias: 'user',
+      },
+    },
   },
   image: {
-    alias: 'image'
+    alias: 'image',
   },
   visitor: {
-    alias: 'visitor'
+    alias: 'visitor',
   },
   role: {
     alias: 'role',
     associations: {
       users: {
-        alias: 'user'
+        alias: 'user',
       },
       permissions: {
-        alias: 'permission'
-      }
-    }
+        alias: 'permission',
+      },
+    },
   },
   group: {
     alias: 'group',
     associations: {
       users: {
-        alias: 'user'
+        alias: 'user',
       },
       permissions: {
-        alias: 'permission'
-      }
-    }
+        alias: 'permission',
+      },
+    },
   },
   permission: {
     alias: 'permission',
     associations: {
       users: {
-        alias: 'user'
+        alias: 'user',
       },
       roles: {
-        alias: 'role'
+        alias: 'role',
       },
       groups: {
-        alias: 'group'
-      }
-    }
-  }
-}
+        alias: 'group',
+      },
+    },
+  },
+};
 
 export const API = {
   USER: resources.user.alias || 'user',
-  PERMISSION: resources.permission.alias || 'permission'
-}
+  PERMISSION: resources.permission.alias || 'permission',
+};
 
-export const REQUIRED_PASSWORD_STRENGTH = 3
+export const REQUIRED_PASSWORD_STRENGTH = 3;
 
 export const USER_ROLES = {
   USER: 'User',
   ADMIN: 'Admin',
-  SUPER_ADMIN: 'Super Admin'
-}
+  SUPER_ADMIN: 'Super Admin',
+};
 
 export const CHAT_TYPES = {
   DIRECT: 'direct',
-  GROUP: 'group'
-}
+  GROUP: 'group',
+};
 
 export const PERMISSION_STATES = {
   INCLUDED: 'Included',
   EXCLUDED: 'Excluded',
-  FORBIDDEN: 'Forbidden'
-}
+  FORBIDDEN: 'Forbidden',
+};
 
 export const RESPONSE_MESSAGES = {
   EXPIRED_ACCESS_TOKEN: 'Expired Access Token',
-  EXPIRED_REFRESH_TOKEN: 'Expired Refresh Token'
-}
+  EXPIRED_REFRESH_TOKEN: 'Expired Refresh Token',
+};
 
 export const NOTIFICATION_TYPES = {
   SHARED_DOCUMENT: 'shared-document',
   FOLLOW: 'follow',
-  CONTACT: 'contact'
-}
+  CONTACT: 'contact',
+};
 
 export const EVENTS = {
   USER_PERMISSIONS_UPDATED: 'user-permissions-updated',
@@ -177,5 +178,5 @@ export const EVENTS = {
   MARK_CONVERSATION_AS_UNREAD: 'mark-conversation-as-unread',
 
   MARK_NOTIFICATION_AS_READ: 'mark-notification-as-read',
-  MARK_NOTIFICATION_AS_UNREAD: 'mark-notification-as-unread'
-}
+  MARK_NOTIFICATION_AS_UNREAD: 'mark-notification-as-unread',
+};

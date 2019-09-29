@@ -1,4 +1,4 @@
-import AuditLogs from '../components/views/audit-logs/AuditLogs.vue'
+import AuditLogs from '../components/views/audit-logs/AuditLogs.vue';
 
 const routes = [
   {
@@ -8,9 +8,9 @@ const routes = [
     meta: {
       description: 'List of audit logs',
       title: 'AuditLogs',
-      requiresAuth: true
-    }
-  }
-]
+      requiresAuth: true,
+    },
+  },
+];
 
-export default routes
+export default routes;

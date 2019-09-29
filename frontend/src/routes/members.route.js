@@ -1,5 +1,5 @@
-import Members from '../components/views/members/Members.vue'
-import MemberProfile from '../components/views/members/MemberProfile.vue'
+import Members from '../components/views/members/Members.vue';
+import MemberProfile from '../components/views/members/MemberProfile.vue';
 
 const routes = [
   {
@@ -9,22 +9,22 @@ const routes = [
     meta: {
       description: 'List of mbt.guide members',
       title: 'Members',
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
     path: '/members/:_id',
     beforeEnter: (to, from, next) => {
-      to.params._id === 'create' ? next({ name: 'MemberCreate' }) : next()
+      to.params._id === 'create' ? next({ name: 'MemberCreate' }) : next();
     },
     component: MemberProfile,
     name: 'MemberProfile',
     meta: {
       description: 'Profile for the selected member',
       title: 'Member Profile',
-      requiresAuth: true
-    }
-  }
-]
+      requiresAuth: true,
+    },
+  },
+];
 
-export default routes
+export default routes;

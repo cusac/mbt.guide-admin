@@ -2,15 +2,19 @@
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
   parserOptions: {
+    parser: 'babel-eslint',
     sourceType: 'module',
   },
   env: {
     browser: true,
   },
-  // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  extends: ['plugin:prettier/recommended'],
+  extends: [
+    'plugin:vue/recommended',
+    'plugin:prettier/recommended',
+    'eslint:recommended',
+    'prettier/vue',
+  ],
   // plugins: ['prettier'],
   // add your custom rules here
   rules: {
@@ -21,5 +25,17 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'prettier/prettier': 'error',
+    'vue/html-self-closing': [
+      'error',
+      {
+        html: {
+          void: 'any',
+        },
+      },
+    ],
+    'vue/max-attributes-per-line': false,
+    //TODO: re-enable this and set types
+    'vue/require-prop-types': false,
+    'no-console': 0,
   },
 };

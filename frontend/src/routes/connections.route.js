@@ -1,4 +1,4 @@
-import Connections from '../components/views/connections/Connections.vue'
+import Connections from '../components/views/connections/Connections.vue';
 
 const routes = [
   {
@@ -8,9 +8,9 @@ const routes = [
     meta: {
       description: 'Users connected to you',
       title: 'Connections',
-      requiresAuth: true
-    }
-  }
-]
+      requiresAuth: true,
+    },
+  },
+];
 
-export default routes
+export default routes;

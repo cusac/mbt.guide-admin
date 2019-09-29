@@ -1,60 +1,52 @@
-import _ from 'lodash'
+import _ from 'lodash';
 
-import vm from '../main'
+import vm from '../main';
 
-const internals = {}
+const internals = {};
 
 internals.createRole = function(role) {
-  role = Object.assign({}, role)
+  role = Object.assign({}, role);
 
   const permissions = (role.permissions || []).concat([]).map(permission => {
-    return { childId: permission.permission._id, state: permission.state }
-  })
+    return { childId: permission.permission._id, state: permission.state };
+  });
 
-  delete role.permissions
+  delete role.permissions;
 
-  const promises = []
+  const promises = [];
   return vm.$roleRepository
     .create(role)
     .then(result => {
-      role = result.data
+      role = result.data;
       if (!_.isEmpty(permissions)) {
-        promises.push(
-          vm.$roleRepository.addManyPermissions(role._id, permissions)
-        )
+        promises.push(vm.$roleRepository.addManyPermissions(role._id, permissions));
       }
 
-      return Promise.all(promises)
+      return Promise.all(promises);
     })
     .catch(error => {
-      console.error('roleService.createRole-error:\n', error)
-      throw error
-    })
-}
+      console.error('roleService.createRole-error:\n', error);
+      throw error;
+    });
+};
 
 internals.updateRole = function(newRole, oldRole) {
-  newRole = Object.assign({}, newRole)
-  oldRole = Object.assign({}, oldRole)
+  newRole = Object.assign({}, newRole);
+  oldRole = Object.assign({}, oldRole);
 
-  const newPermissions = (newRole.permissions || []).concat([])
-  const oldPermissions = (oldRole.permissions || []).concat([])
+  const newPermissions = (newRole.permissions || []).concat([]);
+  const oldPermissions = (oldRole.permissions || []).concat([]);
 
-  delete newRole.permissions
+  delete newRole.permissions;
 
-  const promises = []
-  promises.push(vm.$roleRepository.update(newRole._id, newRole))
-  promises.push(
-    internals.updateRolePermissions(newRole._id, newPermissions, oldPermissions)
-  )
+  const promises = [];
+  promises.push(vm.$roleRepository.update(newRole._id, newRole));
+  promises.push(internals.updateRolePermissions(newRole._id, newPermissions, oldPermissions));
 
-  return Promise.all(promises)
-}
+  return Promise.all(promises);
+};
 
-internals.updateRolePermissions = function(
-  roleId,
-  newPermissions,
-  oldPermissions
-) {
+internals.updateRolePermissions = function(roleId, newPermissions, oldPermissions) {
   // Add any new permissions or updated permissions who's state has changed.
   let permissionsToAdd = newPermissions
     .filter(newPermission => {
@@ -62,12 +54,12 @@ internals.updateRolePermissions = function(
         return (
           oldPermission.permission._id === newPermission.permission._id &&
           oldPermission.state === newPermission.state
-        )
-      })
+        );
+      });
     })
     .map(permission => {
-      return { childId: permission.permission._id, state: permission.state }
-    })
+      return { childId: permission.permission._id, state: permission.state };
+    });
 
   let permissionsToRemove = oldPermissions
     .filter(oldPermission => {
@@ -75,22 +67,22 @@ internals.updateRolePermissions = function(
         return (
           oldPermission.permission._id === newPermission.permission._id &&
           oldPermission.state === newPermission.state
-        )
-      })
+        );
+      });
     })
     .map(permission => {
-      return permission.permission._id
-    })
+      return permission.permission._id;
+    });
 
   let promise = _.isEmpty(permissionsToAdd)
     ? Promise.resolve()
-    : vm.$roleRepository.addManyPermissions(roleId, permissionsToAdd)
+    : vm.$roleRepository.addManyPermissions(roleId, permissionsToAdd);
 
   return promise.then(() => {
     return _.isEmpty(permissionsToRemove)
       ? Promise.resolve()
-      : vm.$roleRepository.removeManyPermissions(roleId, permissionsToRemove)
-  })
-}
+      : vm.$roleRepository.removeManyPermissions(roleId, permissionsToRemove);
+  });
+};
 
-export default internals
+export default internals;

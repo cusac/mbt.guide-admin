@@ -1,24 +1,24 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
-import generateMutations from './utilities/generate-mutations'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
+import generateMutations from './utilities/generate-mutations';
 
-import auth from './modules/auth'
+import auth from './modules/auth';
 // import websocket from './modules/websocket'
 
-import state from './state'
-import actions from './actions'
-import mutations from './mutations'
+import state from './state';
+import actions from './actions';
+import mutations from './mutations';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state,
   actions,
   mutations: Object.assign(mutations, generateMutations(state)),
   modules: {
-    auth
+    auth,
     // websocket
   },
-  plugins: [createPersistedState()]
-})
+  plugins: [createPersistedState()],
+});

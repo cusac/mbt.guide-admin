@@ -1,6 +1,6 @@
-import Permissions from '../components/views/permissions/Permissions.vue'
-import PermissionDetails from '../components/views/permissions/PermissionDetails.vue'
-import PermissionCreate from '../components/views/permissions/PermissionCreate.vue'
+import Permissions from '../components/views/permissions/Permissions.vue';
+import PermissionDetails from '../components/views/permissions/PermissionDetails.vue';
+import PermissionCreate from '../components/views/permissions/PermissionCreate.vue';
 
 const routes = [
   {
@@ -10,21 +10,21 @@ const routes = [
     meta: {
       description: 'List of mbt.guide permissions',
       title: 'Permissions',
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
     path: '/permissions/:_id',
     beforeEnter: (to, from, next) => {
-      to.params._id === 'create' ? next({ name: 'PermissionCreate' }) : next()
+      to.params._id === 'create' ? next({ name: 'PermissionCreate' }) : next();
     },
     component: PermissionDetails,
     name: 'PermissionDetails',
     meta: {
       description: 'Details for the selected permission',
       title: 'Permission Details',
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
     path: '/permission/create',
@@ -33,9 +33,9 @@ const routes = [
     meta: {
       description: 'Create a new permission',
       title: 'Permission Create',
-      requiresAuth: true
-    }
-  }
-]
+      requiresAuth: true,
+    },
+  },
+];
 
-export default routes
+export default routes;

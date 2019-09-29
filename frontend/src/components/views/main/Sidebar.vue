@@ -1,9 +1,7 @@
 <template>
   <aside class="main-sidebar">
-
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
@@ -13,25 +11,25 @@
           <div>
             <p class="white">{{ displayName }}</p>
           </div>
-          <a href="javascript:;">
-            <i class="fa fa-circle text-success"></i> Online
-          </a>
+          <a href="javascript:;"> <i class="fa fa-circle text-success" /> Online </a>
         </div>
       </div>
 
       <!-- search form (Optional) -->
-      <form v-on:submit.prevent class="sidebar-form">
+      <form class="sidebar-form" @submit.prevent>
         <div class="input-group">
-          <input type="text"
-            name="search"
+          <input
             id="search"
+            type="text"
+            name="search"
             class="search form-control"
             data-toggle="hideseek"
             placeholder="Search Menus"
-            data-list=".sidebar-menu">
+            data-list=".sidebar-menu"
+          />
           <span class="input-group-btn">
-            <button type="submit" name="search" id="search-btn" class="btn btn-flat">
-              <i class="fa fa-search"></i>
+            <button id="search-btn" type="submit" name="search" class="btn btn-flat">
+              <i class="fa fa-search" />
             </button>
           </span>
         </div>
@@ -47,14 +45,17 @@
 </template>
 
 <script>
-import SidebarMenu from './SidebarMenu'
+import SidebarMenu from './SidebarMenu';
 
 export default {
   name: 'Sidebar',
-  props: ['displayName', 'pictureUrl'],
   components: { SidebarMenu },
-  mounted: function () {
-    window.jQuery('[data-toggle="hideseek"]').off().hideseek()
-  }
-}
+  props: ['displayName', 'pictureUrl'],
+  mounted: function() {
+    window
+      .jQuery('[data-toggle="hideseek"]')
+      .off()
+      .hideseek();
+  },
+};
 </script>

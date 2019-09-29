@@ -1,7 +1,7 @@
 <template>
   <section>
     <div v-if="loading" class="content content-centered">
-      <pulse-loader></pulse-loader>
+      <pulse-loader />
     </div>
 
     <div v-show="!loading" class="content">
@@ -12,19 +12,25 @@
         <!-- /.box-header -->
         <div class="box-body">
           <div class="form-group">
-            <input class="form-control" placeholder="Title" v-model="document.title">
+            <input v-model="document.title" class="form-control" placeholder="Title" />
           </div>
 
-          <vue-editor :canEdit="true"></vue-editor>
-
+          <vue-editor :can-edit="true" />
         </div>
         <!-- /.box-body -->
         <div class="box-footer">
           <div class="pull-right">
-            <button class="btn btn-primary" @click="requestDataToSave"
-                    v-permission.enable="['document', 'createDocument']"><i class="fa fa-file-text"></i> Create</button>
+            <button
+              v-permission.enable="['document', 'createDocument']"
+              class="btn btn-primary"
+              @click="requestDataToSave"
+            >
+              <i class="fa fa-file-text" /> Create
+            </button>
           </div>
-          <button class="btn btn-default" @click="clearDocument"><i class="fa fa-times"></i> Clear</button>
+          <button class="btn btn-default" @click="clearDocument">
+            <i class="fa fa-times" /> Clear
+          </button>
         </div>
         <!-- /.box-footer -->
       </div>
@@ -33,48 +39,49 @@
 </template>
 
 <script>
-  import { eventBus } from '../../../services'
-  import { EVENTS } from '../../../config'
+import { eventBus } from '../../../services';
+import { EVENTS } from '../../../config';
 
-  export default {
-    name: 'DocumentCreate',
-    data () {
-      return {
-        loading: false,
-        EVENTS: EVENTS,
-        document: {}
-      }
+export default {
+  name: 'DocumentCreate',
+  data() {
+    return {
+      loading: false,
+      EVENTS: EVENTS,
+      document: {},
+    };
+  },
+  created() {
+    eventBus.$on(EVENTS.DATA_READY, this.createDocument);
+  },
+  beforeDestroy() {
+    eventBus.$off(EVENTS.DATA_READY, this.createDocument);
+  },
+  methods: {
+    createDocument(data) {
+      this.document.body = data;
+      this.loading = true;
+      return this.$documentRepository
+        .create(this.document)
+        .then(() => {
+          this.loading = false;
+          this.flash = false;
+          this.$snotify.success('Document created', 'Success!');
+          this.$router.push('/documents');
+        })
+        .catch(error => {
+          this.loading = false;
+          console.error('DocumentCreate.createDocument-error:', error);
+          this.$snotify.error('Create document failed', 'Error!');
+        });
     },
-    methods: {
-      createDocument (data) {
-        this.document.body = data
-        this.loading = true
-        return this.$documentRepository.create(this.document)
-          .then((response) => {
-            this.loading = false
-            this.flash = false
-            this.$snotify.success('Document created', 'Success!')
-            this.$router.push('/documents')
-          })
-          .catch(error => {
-            this.loading = false
-            console.error('DocumentCreate.createDocument-error:', error)
-            this.$snotify.error('Create document failed', 'Error!')
-          })
-      },
-      clearDocument () {
-        eventBus.$emit(EVENTS.CLEAR_REQUESTED)
-        this.document.title = ''
-      },
-      requestDataToSave () {
-        eventBus.$emit(EVENTS.DATA_REQUESTED)
-      }
+    clearDocument() {
+      eventBus.$emit(EVENTS.CLEAR_REQUESTED);
+      this.document.title = '';
     },
-    created () {
-      eventBus.$on(EVENTS.DATA_READY, this.createDocument)
+    requestDataToSave() {
+      eventBus.$emit(EVENTS.DATA_REQUESTED);
     },
-    beforeDestroy () {
-      eventBus.$off(EVENTS.DATA_READY, this.createDocument)
-    }
-  }
+  },
+};
 </script>
