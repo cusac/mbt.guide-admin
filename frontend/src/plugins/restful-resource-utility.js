@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const ResourceHelper = function(httpClient, logger) {
   return {
     /**
@@ -5,18 +6,19 @@ const ResourceHelper = function(httpClient, logger) {
      * @param resourceRoute: The API route for the resource.
      * @param options: Additional options to customize the caller.
      */
-    generateCrudCallers: function(resourceRoute) {
+    generateCrudCallers: function(resourceRoute, options) {
+      options = options || {};
       return {
-        list: this.generateListCaller(resourceRoute),
-        find: this.generateFindCaller(resourceRoute),
-        update: this.generateUpdateCaller(resourceRoute),
-        create: this.generateCreateCaller(resourceRoute),
-        deleteOne: this.generateDeleteOneCaller(resourceRoute),
-        deleteMany: this.generateDeleteManyCaller(resourceRoute),
+        list: this.generateListCaller(resourceRoute, options),
+        find: this.generateFindCaller(resourceRoute, options),
+        update: this.generateUpdateCaller(resourceRoute, options),
+        create: this.generateCreateCaller(resourceRoute, options),
+        deleteOne: this.generateDeleteOneCaller(resourceRoute, options),
+        deleteMany: this.generateDeleteManyCaller(resourceRoute, options),
       };
     },
-    generateListCaller: function(resourceRoute) {
-      return function(params, options) {
+    generateListCaller: function(resourceRoute, options) {
+      return function(params) {
         logger.debug(resourceRoute + '.list + params: ', params);
 
         if (!params) {
@@ -41,7 +43,7 @@ const ResourceHelper = function(httpClient, logger) {
           });
       };
     },
-    generateFindCaller: function(resourceRoute) {
+    generateFindCaller: function(resourceRoute, options) {
       return function(_id, params) {
         logger.debug(resourceRoute + '.find + _id: ', _id, ', params: ', params);
 
@@ -57,7 +59,7 @@ const ResourceHelper = function(httpClient, logger) {
           });
       };
     },
-    generateUpdateCaller: function(resourceRoute) {
+    generateUpdateCaller: function(resourceRoute, options) {
       return function(_id, payload) {
         delete payload.createdAt;
         delete payload.updatedAt;
@@ -76,7 +78,7 @@ const ResourceHelper = function(httpClient, logger) {
           });
       };
     },
-    generateCreateCaller: function(resourceRoute) {
+    generateCreateCaller: function(resourceRoute, options) {
       return function(payload) {
         logger.debug(resourceRoute + '.create + payload: ', payload);
 
@@ -92,7 +94,7 @@ const ResourceHelper = function(httpClient, logger) {
           });
       };
     },
-    generateDeleteOneCaller: function(resourceRoute) {
+    generateDeleteOneCaller: function(resourceRoute, options) {
       return function(_id, hardDelete) {
         hardDelete = hardDelete || false;
         logger.debug(resourceRoute + '.deleteOne + _id: ', _id, ', hardDelete: ', hardDelete);
@@ -109,7 +111,7 @@ const ResourceHelper = function(httpClient, logger) {
           });
       };
     },
-    generateDeleteManyCaller: function(resourceRoute) {
+    generateDeleteManyCaller: function(resourceRoute, options) {
       return function(payload) {
         logger.debug(resourceRoute + '.deleteMany + payload', payload);
 
@@ -142,33 +144,39 @@ const ResourceHelper = function(httpClient, logger) {
      * DELETE /user/{ownerId}/cart-item/{childId}   Remove a single storeItem from a user's list of shoppingCartItems
      * PUT /user/{ownerId}/cart-item/{childId}      Add a single storeItem to a user's list of shoppingCartItems
      */
-    generateAssociationCallers: function(ownerRoute, associationName, associationRoute) {
+    generateAssociationCallers: function(ownerRoute, associationName, associationRoute, options) {
+      options = options || {};
       var resourceMethodName = associationName[0].toUpperCase() + associationName.slice(1);
       var callers = {};
       callers['get' + resourceMethodName] = this.generateGetAssociationsAssociationCaller(
         ownerRoute,
         associationRoute,
-        resourceMethodName
+        resourceMethodName,
+        options
       );
       callers['addOne' + resourceMethodName] = this.generateAddOneAssociationCaller(
         ownerRoute,
         associationRoute,
-        resourceMethodName
+        resourceMethodName,
+        options
       );
       callers['removeOne' + resourceMethodName] = this.generateRemoveOneAssociationCaller(
         ownerRoute,
         associationRoute,
-        resourceMethodName
+        resourceMethodName,
+        options
       );
       callers['addMany' + resourceMethodName] = this.generateAddManyAssociationCaller(
         ownerRoute,
         associationRoute,
-        resourceMethodName
+        resourceMethodName,
+        options
       );
       callers['removeMany' + resourceMethodName] = this.generateRemoveManyAssociationCaller(
         ownerRoute,
         associationRoute,
-        resourceMethodName
+        resourceMethodName,
+        options
       );
 
       return callers;
@@ -205,7 +213,12 @@ const ResourceHelper = function(httpClient, logger) {
           });
       };
     },
-    generateAddOneAssociationCaller: function(ownerRoute, associationRoute, resourceMethodName) {
+    generateAddOneAssociationCaller: function(
+      ownerRoute,
+      associationRoute,
+      resourceMethodName,
+      options
+    ) {
       return function(ownerId, childId, payload) {
         var methodName = ownerRoute + '.addOne' + resourceMethodName;
         logger.debug(
@@ -229,7 +242,12 @@ const ResourceHelper = function(httpClient, logger) {
           });
       };
     },
-    generateRemoveOneAssociationCaller: function(ownerRoute, associationRoute, resourceMethodName) {
+    generateRemoveOneAssociationCaller: function(
+      ownerRoute,
+      associationRoute,
+      resourceMethodName,
+      options
+    ) {
       return function(ownerId, childId) {
         var methodName = ownerRoute + '.removeOne' + resourceMethodName;
         logger.debug(
@@ -253,7 +271,12 @@ const ResourceHelper = function(httpClient, logger) {
           });
       };
     },
-    generateAddManyAssociationCaller: function(ownerRoute, associationRoute, resourceMethodName) {
+    generateAddManyAssociationCaller: function(
+      ownerRoute,
+      associationRoute,
+      resourceMethodName,
+      options
+    ) {
       return function(ownerId, payload) {
         var methodName = ownerRoute + '.addMany' + resourceMethodName;
         logger.debug(methodName + ' + ownerId: ', ownerId, ', payload: ', payload);
@@ -273,7 +296,8 @@ const ResourceHelper = function(httpClient, logger) {
     generateRemoveManyAssociationCaller: function(
       ownerRoute,
       associationRoute,
-      resourceMethodName
+      resourceMethodName,
+      options
     ) {
       return function(ownerId, payload) {
         var methodName = ownerRoute + '.removeMany' + resourceMethodName;
