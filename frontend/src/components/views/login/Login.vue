@@ -31,46 +31,7 @@
           </div>
 
           <div v-if="accountActive" class="text-center col-md-4 col-md-offset-4">
-            <!-- login form -->
-            <form class="ui form loginForm"  @submit.prevent="login">
-
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                <input class="form-control" name="email" placeholder="Email" type="text" v-model="email">
-              </div>
-
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
-              </div>
-
-              <div class="form-actions">
-                <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Login</button>
-
-                <router-link to="/login/forgot">
-                  <div style="margin-top: 15px;">
-                    <a>Forgot password?</a>
-                  </div>
-                </router-link>
-              </div>
-            </form>
-
-
-            <div>
-                <hr>
-                <h3>Or</h3>
-              <div>
-                <a class="btn btn-block btn-social btn-facebook" :href="loginFacebookURI">
-                  <span class="fa fa-facebook"></span> Sign in with Facebook
-                </a>
-                <a class="btn btn-block btn-social btn-google" :href="loginGoogleURI">
-                  <span class="fa fa-google"></span> Sign in with Google
-                </a>
-                <a class="btn btn-block btn-social btn-github" :href="loginGithubURI">
-                  <span class="fa fa-github"></span> Sign in with GitHub
-                </a>
-              </div>
-            </div>
+            <div id="firebaseui-auth-container"></div>
           </div>
 
           <div v-if="!accountActive && !emailSent" class="text-center col-md-4 col-md-offset-4">
@@ -113,6 +74,14 @@
   import { authService, formService } from '../../../services'
   import config from '../../../config'
 
+  import firebase from 'firebase';
+  import * as firebaseui from 'firebaseui'
+  import {firebaseConfig} from '../../../../firebaseConfig';
+
+
+  //TODO: Import test users
+  const testUsers = ['test@superadmin.com', 'test@admin.com']
+
   export default {
     name: 'Login',
     data () {
@@ -125,8 +94,14 @@
         accountActive: true,
         emailSent: false,
         email: '',
-        password: ''
+        password: '',
+        authUIConfig: null,
+        authUI: null,
       }
+    },
+    mounted() {
+      this.setAuthUI();
+      this.startAuthUI();
     },
     computed: {
       // The '/auth/{social}' endpoint will first authenticate the user using the third party
@@ -144,12 +119,10 @@
     methods: {
       fieldClassName: formService.fieldClassName,
       emailValidator: formService.emailValidator,
-      login () {
-        const { email, password } = this
-
+      login ({ email, password, idToken, displayName }) {
         this.loading = true
 
-        authService.login({ email, password })
+        return authService.login({ email, password, idToken, displayName })
           .then(response => {
             this.loading = false
             this.$snotify.success('Login successful', 'Success!')
@@ -205,6 +178,68 @@
                 'Please try again or contact us if you continue to have trouble creating an account.'
             }
           })
+      },
+      setAuthUI () {
+        this.authUIConfig = {
+          callbacks: {
+            signInSuccessWithAuthResult: this.signInSuccessWithAuthResult,
+            uiShown: this.uiShown
+          },
+          signInFlow: 'popup',
+          signInOptions: [
+            {
+              provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+              signInMethod: firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD,
+              requireDisplayName: true,
+            },
+            firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+          ],
+        };
+        this.authUI = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth());
+        let self = this;
+      },
+      startAuthUI () {
+        this.authUI.start('#firebaseui-auth-container', this.authUIConfig);
+      },
+      uiShown () {
+        // Grab the password for login to support super admin login
+        const submitButton = document.getElementsByClassName('firebaseui-id-submit')[0];
+        const emailInput = document.getElementsByClassName('firebaseui-id-email')[0];
+        const passwordInput = document.getElementsByClassName('firebaseui-id-password')[0];
+        if (submitButton && passwordInput && emailInput) {
+          submitButton.onclick = async e => {
+            if (testUsers.includes(emailInput.value)) {
+              e.stopPropagation();
+              this.login({ email: emailInput.value, password: passwordInput.value });
+            }
+          };
+        }
+        return false;
+      },
+      signInSuccessWithAuthResult (result) {
+        this.handleSignIn(result)
+        return false;
+      },
+      async handleSignIn (result) {
+        const idToken = await firebase.auth().currentUser.getIdToken();
+        const { displayName } = firebase.auth().currentUser;
+
+        let { emailVerified } = result.user;
+
+        emailVerified && (await this.login({ idToken, displayName }));
+
+        if (!emailVerified && !testUsers.includes(firebase.auth().currentUser.email)) {
+          await firebase
+            .auth()
+            .currentUser.sendEmailVerification()
+          
+          this.flash = true
+          this.flashType = 'info'
+          this.flashMessage = 'You need to activate your account. An activation email has been sent to your address.'
+
+          await firebase.auth().signOut();
+          this.startAuthUI()
+        }
       }
     },
     created () {

@@ -6,6 +6,7 @@ import 'es6-promise/auto'
 import '../static/css/Custom.scss'
 import 'vue-snotify/styles/material.css'
 import 'vue-croppa/dist/vue-croppa.css'
+import 'firebaseui/dist/firebaseui.css'
 
 // Import global js files
 // import '../static/js/plugins/bootstrap/bootstrap.min'
@@ -23,6 +24,9 @@ import { httpClient, wsClient, authInterceptor, statsService } from './services'
 import axios from 'axios'
 import qs from 'querystring'
 import config, { resources } from './config'
+
+import firebase from 'firebase'
+import { firebaseConfig } from '../firebaseConfig'
 
 // Import plugins
 import VueRouter from 'vue-router'
@@ -210,6 +214,9 @@ statsService.postVisit()
 // Start our app!
 // eslint-disable-next-line no-new
 const vm = new Vue({
+  created() {
+    firebase.initializeApp(firebaseConfig)
+  },
   el: '#root',
   router: router,
   store: store,

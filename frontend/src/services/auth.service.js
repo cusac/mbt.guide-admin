@@ -1,5 +1,6 @@
 import store from '../store'
 import _ from 'lodash'
+import firebase from 'firebase'
 
 import vm from '../main'
 import { httpClient as http } from '../services'
@@ -10,7 +11,7 @@ internals.login = credentials => {
   return http
     .post('/login', credentials)
     .then(response => {
-      store.dispatch('auth/setAuth', response.data)
+      return store.dispatch('auth/setAuth', response.data)
     })
     .catch(error => {
       console.error('authService.login-error:\n', error)
@@ -35,6 +36,7 @@ internals.logout = () => {
   return http
     .delete('/logout')
     .then(response => {
+      firebase.auth().signOut()
       store.dispatch('auth/clearAuth')
     })
     .catch(error => {
