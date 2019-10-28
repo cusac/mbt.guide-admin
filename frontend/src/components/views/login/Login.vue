@@ -1,22 +1,8 @@
 <template>
   <div class="container container-table">
-    <div>
-      <router-link to="/register">
-        <a class="btn btn-default btn-w-sm btn-upper btn-outline hidden-xs pull-right">
-          Get Started
-        </a>
-        <a class="btn btn-link pull-right">
-          Need an account?
-        </a>
-      </router-link>
-    </div>
-
     <div class="row vertical-10p">
       <div class="container">
-        <img
-          src="/static/img/white_logo_transparent_no_container_no_slogan.png"
-          class="center-block login logo"
-        />
+        <img src="/static/img/logo-wide.png" class="center-block login logo" />
 
         <!--<div class="page-header">-->
         <!--<h1 style="text-align: center;">Login to appy</h1>-->
@@ -295,7 +281,7 @@ body,
   padding-top: 10%;
 }
 .login.logo {
-  width: 20em;
+  width: 50em;
   padding: 3em;
 }
 .loginForm .input-group {
