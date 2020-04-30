@@ -34,7 +34,7 @@
     "firebaseui": "^4.2.0",
     "hideseek": "^0.7.0",
     "http-server": "^0.9.0",
-    "jquery": "^2.2.2",
+    "jquery": "^3.5.0",
     "lodash": "^4.17.4",
     "moment": "^2.12.0",
     "nes": "6.5.2",
