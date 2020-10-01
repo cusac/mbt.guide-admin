@@ -25,6 +25,26 @@ internals.getDashboardStats = () => {
   }
 };
 
+internals.getSegmentStats = () => {
+  let promises = [];
+
+  // This function sometimes gets called before the global vm is ready
+  if (vm) {
+    promises.push(http.get('/video-stats?$sort=-createdAt'));
+
+    return Promise.all(promises).then(result => {
+      let stats = result[0].data.docs;
+      return stats;
+    });
+  } else {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(internals.getSegmentStats());
+      }, 100);
+    });
+  }
+};
+
 internals.postVisit = () => {
   return http.post('visitor');
 };

@@ -12,6 +12,166 @@
     <div class="row">
       <!-- Left col -->
       <div class="col-lg-8">
+        <!-- SEGMENTS CREATED -->
+        <box
+          :classes="['box-warning']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Segments Created</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <canvas id="segmentsCreatedChart" />
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="statsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /SEGMENTS CREATED -->
+
+        <!-- HOURS PROCESSED -->
+        <box
+          :classes="['box-success']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Video Hours Processed</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <canvas id="hoursProcessedChart" />
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="statsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /SEGMENTS CREATED -->
+
+        <!-- /.row -->
+      </div>
+      <!-- /.col -->
+
+      <!-- Right col -->
+      <div class="col-lg-4">
+        <!-- BROWSER USAGE -->
+        <box
+          :classes="['box-default']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Browser Usage</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <canvas id="pieChart" height="185px" />
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="statsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /BROWSER USAGE -->
+
+        <!-- INFO BANNERS -->
+        <div>
+          <div class="small-box bg-red">
+            <div class="inner">
+              <h3>{{ adminStats.userCount }}</h3>
+
+              <p>User Registrations</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-person-add" />
+            </div>
+            <a v-tooltip="'Coming Soon!'" href="#" class="small-box-footer">
+              More info <i class="fa fa-arrow-circle-right" />
+            </a>
+          </div>
+          <!-- /.small box -->
+
+          <div class="small-box bg-green">
+            <div class="inner">
+              <h3>{{ adminStats.messageCount }}</h3>
+
+              <p>Messages Sent</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-comments-o" />
+            </div>
+            <a v-tooltip="'Coming Soon!'" href="#" class="small-box-footer">
+              More info <i class="fa fa-arrow-circle-right" />
+            </a>
+          </div>
+          <!-- /.small box -->
+
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h3>{{ adminStats.imageCount }}</h3>
+
+              <p>Images Uploaded</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-images" />
+            </div>
+            <a v-tooltip="'Coming Soon!'" href="#" class="small-box-footer">
+              More info <i class="fa fa-arrow-circle-right" />
+            </a>
+          </div>
+          <!-- /.small box -->
+
+          <div class="small-box bg-yellow">
+            <div class="inner">
+              <h3>{{ adminStats.documentCount }}</h3>
+
+              <p>Documents Created</p>
+            </div>
+            <div class="icon">
+              <i class="ion ion-document" />
+            </div>
+            <a v-tooltip="'Coming Soon!'" href="#" class="small-box-footer">
+              More info <i class="fa fa-arrow-circle-right" />
+            </a>
+          </div>
+          <!-- /.small box -->
+        </div>
+        <!-- /INFO BANNERS -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+      <div class="col-lg-12 col-xs-12">
         <!-- USERS LIST -->
         <box
           :classes="['box-danger']"
@@ -66,67 +226,9 @@
         </box>
         <!-- /USERS LIST -->
 
-        <div class="row">
-          <div class="col-lg-12">
-            <!-- VISITOR MAP -->
-            <box
-              :classes="['box-success']"
-              :can-collapse="true"
-              :can-close="true"
-              :disable-footer="true"
-              :header-border="true"
-              :no-padding="true"
-            >
-              <div slot="header">
-                <h3 class="box-title">Visitors Report</h3>
-              </div>
-              <!-- /box-header -->
-
-              <div slot="body">
-                <div class="row">
-                  <div class="col-md-9 col-sm-8">
-                    <div class="pad">
-                      <!-- Map will be created here -->
-                      <visitor-map v-if="!statsLoading" :stats="stats" />
-                    </div>
-                  </div>
-                  <!--  /.col -->
-                  <div class="col-md-3 col-sm-4">
-                    <!-- small box -->
-                    <div class="small-box bg-green visitor-box">
-                      <div class="inner text-center">
-                        <h3>{{ stats.visitorCount }}</h3>
-
-                        <p>Visitors</p>
-                      </div>
-                      <div class="icon text-center">
-                        <i class="ion ion-mouse" />
-                      </div>
-                    </div>
-                  </div>
-                  <!--  /.col -->
-                </div>
-              </div>
-              <!-- /box-body -->
-
-              <div v-if="statsLoading" class="overlay">
-                <i class="fa"><pulse-loader /></i>
-              </div>
-              <!-- /.overlay -->
-            </box>
-            <!-- /VISITOR MAP -->
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.col -->
-
-      <!-- Right col -->
-      <div class="col-lg-4">
-        <!-- BROWSER USAGE -->
+        <!-- VISITOR MAP -->
         <box
-          :classes="['box-default']"
+          :classes="['box-success']"
           :can-collapse="true"
           :can-close="true"
           :disable-footer="true"
@@ -134,13 +236,33 @@
           :no-padding="true"
         >
           <div slot="header">
-            <h3 class="box-title">Browser Usage</h3>
+            <h3 class="box-title">Visitors Report</h3>
           </div>
           <!-- /box-header -->
 
           <div slot="body">
-            <div class="chart-responsive">
-              <canvas id="pieChart" height="185px" />
+            <div class="row">
+              <div class="col-md-9 col-sm-8">
+                <div class="pad">
+                  <!-- Map will be created here -->
+                  <visitor-map v-if="!statsLoading" :stats="adminStats" />
+                </div>
+              </div>
+              <!--  /.col -->
+              <div class="col-md-3 col-sm-4">
+                <!-- small box -->
+                <div class="small-box bg-green visitor-box">
+                  <div class="inner text-center">
+                    <h3>{{ adminStats.visitorCount }}</h3>
+
+                    <p>Visitors</p>
+                  </div>
+                  <div class="icon text-center">
+                    <i class="ion ion-mouse" />
+                  </div>
+                </div>
+              </div>
+              <!--  /.col -->
             </div>
           </div>
           <!-- /box-body -->
@@ -150,233 +272,7 @@
           </div>
           <!-- /.overlay -->
         </box>
-        <!-- /BROWSER USAGE -->
-
-        <!-- INFO BANNERS -->
-        <div>
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3>{{ stats.userCount }}</h3>
-
-              <p>User Registrations</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-person-add" />
-            </div>
-            <a v-tooltip="'Coming Soon!'" href="#" class="small-box-footer">
-              More info <i class="fa fa-arrow-circle-right" />
-            </a>
-          </div>
-          <!-- /.small box -->
-
-          <div class="small-box bg-green">
-            <div class="inner">
-              <h3>{{ stats.messageCount }}</h3>
-
-              <p>Messages Sent</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-comments-o" />
-            </div>
-            <a v-tooltip="'Coming Soon!'" href="#" class="small-box-footer">
-              More info <i class="fa fa-arrow-circle-right" />
-            </a>
-          </div>
-          <!-- /.small box -->
-
-          <div class="small-box bg-aqua">
-            <div class="inner">
-              <h3>{{ stats.imageCount }}</h3>
-
-              <p>Images Uploaded</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-images" />
-            </div>
-            <a v-tooltip="'Coming Soon!'" href="#" class="small-box-footer">
-              More info <i class="fa fa-arrow-circle-right" />
-            </a>
-          </div>
-          <!-- /.small box -->
-
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3>{{ stats.documentCount }}</h3>
-
-              <p>Documents Created</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-document" />
-            </div>
-            <a v-tooltip="'Coming Soon!'" href="#" class="small-box-footer">
-              More info <i class="fa fa-arrow-circle-right" />
-            </a>
-          </div>
-          <!-- /.small box -->
-        </div>
-        <!-- /INFO BANNERS -->
-      </div>
-      <!-- /.col -->
-    </div>
-    <!-- /.row -->
-
-    <div class="row">
-      <div class="col-lg-4 col-xs-6" />
-      <!-- /.col -->
-    </div>
-    <!-- /.row -->
-
-    <div class="row">
-      <div v-tooltip="'Coming Soon!'" class="col-lg-12">
-        <!-- ACTIVITY FEED -->
-        <box
-          :classes="['box-primary']"
-          :can-collapse="true"
-          :can-close="true"
-          :disable-footer="true"
-          :header-border="true"
-          :no-padding="false"
-        >
-          <div slot="header">
-            <h3 class="box-title">Activity Feed</h3>
-          </div>
-          <!-- /box-header -->
-
-          <span slot="box-tools">
-            <span class="label label-danger">Coming Soon!</span>
-          </span>
-          <!-- /box-tools -->
-
-          <div slot="body">
-            <!-- The time line -->
-            <ul class="timeline">
-              <!-- timeline time label -->
-              <li class="time-label">
-                <span class="bg-red">
-                  10 Feb. 2014
-                </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-envelope bg-blue" />
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o" /> 12:05</span>
-
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning
-                    heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo
-                    ifttt zimbra. Babblely odeo kaboodle quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua" />
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o" /> 5 mins ago</span>
-
-                  <h3 class="timeline-header no-border">
-                    <a href="#">Sarah Young</a> accepted your friend request
-                  </h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow" />
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o" /> 27 mins ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                  <div class="timeline-body">
-                    Take me to your leader! Switzerland is small and neutral! We are more like
-                    Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                <span class="bg-green">
-                  3 Jan. 2014
-                </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple" />
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o" /> 2 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                  <div class="timeline-body">
-                    <img src="https://placehold.it/150x100" alt="..." class="margin" />
-                    <img src="https://placehold.it/150x100" alt="..." class="margin" />
-                    <img src="https://placehold.it/150x100" alt="..." class="margin" />
-                    <img src="https://placehold.it/150x100" alt="..." class="margin" />
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-video-camera bg-maroon" />
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o" /> 5 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mr. Doe</a> shared a video</h3>
-
-                  <div class="timeline-body">
-                    <div class="embed-responsive embed-responsive-16by9">
-                      <iframe
-                        class="embed-responsive-item"
-                        src="https://www.youtube.com/embed/tMWkeBIohBs"
-                        frameborder="0"
-                        allowfullscreen
-                      />
-                    </div>
-                  </div>
-                  <div class="timeline-footer">
-                    <a href="#" class="btn btn-xs bg-maroon">See comments</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <li>
-                <i class="fa fa-clock-o bg-gray" />
-              </li>
-            </ul>
-            <!-- /.timeline -->
-          </div>
-          <!-- /box-body -->
-
-          <div slot="footer" class="text-center" />
-          <!-- /box-footer -->
-
-          <div v-if="false" class="overlay">
-            <i class="fa"><pulse-loader /></i>
-          </div>
-          <!--/.overlay -->
-        </box>
-        <!-- /ACTIVITY FEED -->
+        <!-- /VISITOR MAP -->
       </div>
       <!-- /.col -->
     </div>
@@ -400,7 +296,7 @@ export default {
     return {
       newMembers: {},
       client: null,
-      stats: {},
+      adminStats: {},
       statsLoading: true,
     };
   },
@@ -408,6 +304,7 @@ export default {
   created() {
     this.getNewMembers();
     this.getDashboardStats();
+    this.getSegmentStats();
   },
   mounted() {
     //      $('.sparkbar').each(function () {
@@ -449,14 +346,29 @@ export default {
       statsService
         .getDashboardStats()
         .then(result => {
-          this.stats = result;
+          this.adminStats = result;
           this.createPieChart();
           this.statsLoading = false;
         })
         .catch(error => {
           this.statsLoading = false;
           console.error('Dashboard.getDashboardStats-error:', error);
-          this.$snotify.error('Get stats failed', 'Error!');
+          this.$snotify.error('Get adminStats failed', 'Error!');
+        });
+    },
+    getSegmentStats() {
+      this.statsLoading = true;
+      statsService
+        .getSegmentStats()
+        .then(result => {
+          this.segmentStats = result;
+          this.createSegmentCharts();
+          this.statsLoading = false;
+        })
+        .catch(error => {
+          this.statsLoading = false;
+          console.error('Dashboard.getDashboardStats-error:', error);
+          this.$snotify.error('Get segment stats failed', 'Error!');
         });
     },
     createPieChart() {
@@ -466,20 +378,50 @@ export default {
       // Get context with jQuery - using jQuery's .get() method.
       let browsers = [];
       let visitors = [];
-      for (let browser in this.stats.totalVisitorsPerBrowser) {
+      let other = [];
+      for (let browser in this.adminStats.totalVisitorsPerBrowser) {
         browsers.push(browser);
-        visitors.push(this.stats.totalVisitorsPerBrowser[browser]);
+        visitors.push(this.adminStats.totalVisitorsPerBrowser[browser]);
       }
 
       // eslint-disable-next-line no-undef
       var pieChartCanvas = $('#pieChart');
+
+      // 1) combine the arrays:
+      let charData = [];
+      for (var j = 0; j < visitors.length; j++)
+        charData.push({ visitor: visitors[j], browser: browsers[j] });
+
+      // 2) sort:
+      charData.sort(function(a, b) {
+        return a.visitor < b.visitor ? 1 : a.visitor === b.visitor ? 0 : -1;
+      });
+
+      // 3) separate them back out:
+      for (var k = 0; k < charData.length; k++) {
+        visitors[k] = charData[k].visitor;
+        browsers[k] = charData[k].browser;
+      }
+
+      const backgroundColor = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
+
+      const maxChartSize = backgroundColor.length - 1;
+
+      if (visitors.length > maxChartSize) {
+        other = visitors.slice(maxChartSize, visitors.length - 1);
+        visitors = visitors.slice(0, maxChartSize);
+        browsers = browsers.slice(0, maxChartSize);
+
+        visitors.push(other.reduce((prev, curr) => prev + curr));
+        browsers.push('Other');
+      }
 
       let data = {
         datasets: [
           {
             data: visitors,
             //            backgroundColor: color
-            backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+            backgroundColor,
           },
         ],
         // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -495,6 +437,132 @@ export default {
       // -----------------
       // - END PIE CHART -
       // -----------------
+    },
+    createSegmentCharts() {
+      // Get context with jQuery - using jQuery's .get() method.
+      const segmentsCreatedData = this.segmentStats.map(s => {
+        return { x: new Date(s.createdAt), y: s.segmentsCreated };
+      });
+
+      const hoursProcessedData = this.segmentStats.map(s => {
+        return { x: new Date(s.createdAt), y: s.hoursProcessed };
+      });
+
+      // eslint-disable-next-line no-undef
+      var segmentsCreatedChartCanvas = $('#segmentsCreatedChart');
+      var hoursProcessedChartCanvas = $('#hoursProcessedChart');
+
+      let data = {
+        datasets: [
+          {
+            data: segmentsCreatedData,
+            fill: true,
+            label: 'Segments Created',
+            borderColor: '#fe8b36',
+            backgroundColor: '#fe8b36',
+            lineTension: 0,
+            pointRadius: 0,
+            showLine: true,
+            pointHoverBackgroundColor: '#ffffff',
+            pointHoverRadius: '7',
+          },
+        ],
+      };
+
+      // eslint-disable-next-line no-undef
+      new Chart(segmentsCreatedChartCanvas, {
+        // eslint-disable-line no-new
+        type: 'line',
+        data: data,
+        options: {
+          tooltips: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          hover: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                type: 'time',
+                time: {
+                  unit: 'day',
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Segments',
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      data = {
+        datasets: [
+          {
+            data: hoursProcessedData,
+            fill: true,
+            label: 'Hours Processed',
+            borderColor: '#00a65a',
+            backgroundColor: '#00a65a',
+            lineTension: 0,
+            pointRadius: 0,
+            showLine: true,
+            pointHoverBackgroundColor: '#ffffff',
+            pointHoverRadius: '7',
+          },
+        ],
+      };
+
+      // eslint-disable-next-line no-undef
+      new Chart(hoursProcessedChartCanvas, {
+        // eslint-disable-line no-new
+        type: 'line',
+        data: data,
+        options: {
+          tooltips: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          hover: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                type: 'time',
+                time: {
+                  unit: 'day',
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Hours Processed',
+                },
+              },
+            ],
+          },
+        },
+      });
     },
   },
 };
