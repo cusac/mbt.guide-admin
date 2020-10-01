@@ -33,7 +33,7 @@
           </div>
           <!-- /box-body -->
 
-          <div v-if="statsLoading" class="overlay">
+          <div v-if="segmentStatsLoading" class="overlay">
             <i class="fa"><pulse-loader /></i>
           </div>
           <!-- /.overlay -->
@@ -61,7 +61,7 @@
           </div>
           <!-- /box-body -->
 
-          <div v-if="statsLoading" class="overlay">
+          <div v-if="segmentStatsLoading" class="overlay">
             <i class="fa"><pulse-loader /></i>
           </div>
           <!-- /.overlay -->
@@ -95,7 +95,7 @@
           </div>
           <!-- /box-body -->
 
-          <div v-if="statsLoading" class="overlay">
+          <div v-if="adminStatsLoading" class="overlay">
             <i class="fa"><pulse-loader /></i>
           </div>
           <!-- /.overlay -->
@@ -245,7 +245,7 @@
               <div class="col-md-9 col-sm-8">
                 <div class="pad">
                   <!-- Map will be created here -->
-                  <visitor-map v-if="!statsLoading" :stats="adminStats" />
+                  <visitor-map v-if="!adminStatsLoading" :stats="adminStats" />
                 </div>
               </div>
               <!--  /.col -->
@@ -267,7 +267,7 @@
           </div>
           <!-- /box-body -->
 
-          <div v-if="statsLoading" class="overlay">
+          <div v-if="adminStatsLoading" class="overlay">
             <i class="fa"><pulse-loader /></i>
           </div>
           <!-- /.overlay -->
@@ -297,7 +297,8 @@ export default {
       newMembers: {},
       client: null,
       adminStats: {},
-      statsLoading: true,
+      adminStatsLoading: true,
+      segmentStatsLoading: true,
     };
   },
   computed: {},
@@ -342,31 +343,31 @@ export default {
         });
     },
     getDashboardStats() {
-      this.statsLoading = true;
+      this.adminStatsLoading = true;
       statsService
         .getDashboardStats()
         .then(result => {
           this.adminStats = result;
           this.createPieChart();
-          this.statsLoading = false;
+          this.adminStatsLoading = false;
         })
         .catch(error => {
-          this.statsLoading = false;
+          this.adminStatsLoading = false;
           console.error('Dashboard.getDashboardStats-error:', error);
           this.$snotify.error('Get adminStats failed', 'Error!');
         });
     },
     getSegmentStats() {
-      this.statsLoading = true;
+      this.segmentStatsLoading = true;
       statsService
         .getSegmentStats()
         .then(result => {
           this.segmentStats = result;
           this.createSegmentCharts();
-          this.statsLoading = false;
+          this.segmentStatsLoading = false;
         })
         .catch(error => {
-          this.statsLoading = false;
+          this.segmentStatsLoading = false;
           console.error('Dashboard.getDashboardStats-error:', error);
           this.$snotify.error('Get segment stats failed', 'Error!');
         });
