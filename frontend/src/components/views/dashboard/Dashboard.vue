@@ -466,6 +466,7 @@ export default {
       // Get context with jQuery - using jQuery's .get() method.
       let browsers = [];
       let visitors = [];
+      let other = [];
       for (let browser in this.stats.totalVisitorsPerBrowser) {
         browsers.push(browser);
         visitors.push(this.stats.totalVisitorsPerBrowser[browser]);
@@ -474,12 +475,41 @@ export default {
       // eslint-disable-next-line no-undef
       var pieChartCanvas = $('#pieChart');
 
+      // 1) combine the arrays:
+      let charData = [];
+      for (var j = 0; j < visitors.length; j++)
+        charData.push({ visitor: visitors[j], browser: browsers[j] });
+
+      // 2) sort:
+      charData.sort(function(a, b) {
+        return a.visitor < b.visitor ? 1 : a.visitor === b.visitor ? 0 : -1;
+      });
+
+      // 3) separate them back out:
+      for (var k = 0; k < charData.length; k++) {
+        visitors[k] = charData[k].visitor;
+        browsers[k] = charData[k].browser;
+      }
+
+      const backgroundColor = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'];
+
+      const maxChartSize = backgroundColor.length - 1;
+
+      if (visitors.length > maxChartSize) {
+        other = visitors.slice(maxChartSize, visitors.length - 1);
+        visitors = visitors.slice(0, maxChartSize);
+        browsers = browsers.slice(0, maxChartSize);
+
+        visitors.push(other.reduce((prev, curr) => prev + curr));
+        browsers.push('Other');
+      }
+
       let data = {
         datasets: [
           {
             data: visitors,
             //            backgroundColor: color
-            backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+            backgroundColor,
           },
         ],
         // These labels appear in the legend and in the tooltips when hovering different arcs
