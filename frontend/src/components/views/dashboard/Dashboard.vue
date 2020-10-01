@@ -40,7 +40,7 @@
         </box>
         <!-- /SEGMENTS CREATED -->
 
-         <!-- HOURS PROCESSED -->
+        <!-- HOURS PROCESSED -->
         <box
           :classes="['box-success']"
           :can-collapse="true"
@@ -68,112 +68,6 @@
         </box>
         <!-- /SEGMENTS CREATED -->
 
-        <!-- USERS LIST -->
-        <box
-          :classes="['box-danger']"
-          :can-collapse="true"
-          :can-close="true"
-          :disable-footer="false"
-          :header-border="true"
-          :no-padding="true"
-        >
-          <div slot="header">
-            <h3 class="box-title">Latest Members</h3>
-          </div>
-          <!-- /box-header -->
-
-          <span slot="box-tools">
-            <!--<span class="label label-danger">8 New Members</span>-->
-          </span>
-          <!-- /box-tools -->
-
-          <div slot="body">
-            <ul class="users-list clearfix">
-              <li v-for="user in newMembers" :key="user._id">
-                <img :src="user.profileImageUrl" alt="User Image" />
-
-                <router-link :to="'/members/' + user._id">
-                  <a class="users-list-name" href="#">{{ getName(user) }}</a>
-                </router-link>
-
-                <span class="users-list-date">{{ user.createdAt | moment('D MMM') }}</span>
-              </li>
-            </ul>
-            <!-- /.users-list -->
-          </div>
-          <!-- /box-body -->
-
-          <div slot="footer" class="text-center">
-            <router-link
-              v-permission.enable="['user', 'readUser']"
-              tag="a"
-              class="pageLink uppercase"
-              to="/members"
-            >
-              View All Members
-            </router-link>
-          </div>
-          <!-- /box-footer -->
-
-          <div v-if="newMembersLoading" class="overlay">
-            <i class="fa"><pulse-loader /></i>
-          </div>
-          <!-- /.overlay -->
-        </box>
-        <!-- /USERS LIST -->
-
-        <div class="row">
-          <div class="col-lg-12">
-            <!-- VISITOR MAP -->
-            <box
-              :classes="['box-success']"
-              :can-collapse="true"
-              :can-close="true"
-              :disable-footer="true"
-              :header-border="true"
-              :no-padding="true"
-            >
-              <div slot="header">
-                <h3 class="box-title">Visitors Report</h3>
-              </div>
-              <!-- /box-header -->
-
-              <div slot="body">
-                <div class="row">
-                  <div class="col-md-9 col-sm-8">
-                    <div class="pad">
-                      <!-- Map will be created here -->
-                      <visitor-map v-if="!statsLoading" :stats="adminStats" />
-                    </div>
-                  </div>
-                  <!--  /.col -->
-                  <div class="col-md-3 col-sm-4">
-                    <!-- small box -->
-                    <div class="small-box bg-green visitor-box">
-                      <div class="inner text-center">
-                        <h3>{{ adminStats.visitorCount }}</h3>
-
-                        <p>Visitors</p>
-                      </div>
-                      <div class="icon text-center">
-                        <i class="ion ion-mouse" />
-                      </div>
-                    </div>
-                  </div>
-                  <!--  /.col -->
-                </div>
-              </div>
-              <!-- /box-body -->
-
-              <div v-if="statsLoading" class="overlay">
-                <i class="fa"><pulse-loader /></i>
-              </div>
-              <!-- /.overlay -->
-            </box>
-            <!-- /VISITOR MAP -->
-          </div>
-          <!-- /.col -->
-        </div>
         <!-- /.row -->
       </div>
       <!-- /.col -->
@@ -277,7 +171,109 @@
     <!-- /.row -->
 
     <div class="row">
-      <div class="col-lg-4 col-xs-6" />
+      <div class="col-lg-12 col-xs-12">
+        <!-- USERS LIST -->
+        <box
+          :classes="['box-danger']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="false"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Latest Members</h3>
+          </div>
+          <!-- /box-header -->
+
+          <span slot="box-tools">
+            <!--<span class="label label-danger">8 New Members</span>-->
+          </span>
+          <!-- /box-tools -->
+
+          <div slot="body">
+            <ul class="users-list clearfix">
+              <li v-for="user in newMembers" :key="user._id">
+                <img :src="user.profileImageUrl" alt="User Image" />
+
+                <router-link :to="'/members/' + user._id">
+                  <a class="users-list-name" href="#">{{ getName(user) }}</a>
+                </router-link>
+
+                <span class="users-list-date">{{ user.createdAt | moment('D MMM') }}</span>
+              </li>
+            </ul>
+            <!-- /.users-list -->
+          </div>
+          <!-- /box-body -->
+
+          <div slot="footer" class="text-center">
+            <router-link
+              v-permission.enable="['user', 'readUser']"
+              tag="a"
+              class="pageLink uppercase"
+              to="/members"
+            >
+              View All Members
+            </router-link>
+          </div>
+          <!-- /box-footer -->
+
+          <div v-if="newMembersLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /USERS LIST -->
+
+        <!-- VISITOR MAP -->
+        <box
+          :classes="['box-success']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Visitors Report</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="row">
+              <div class="col-md-9 col-sm-8">
+                <div class="pad">
+                  <!-- Map will be created here -->
+                  <visitor-map v-if="!statsLoading" :stats="adminStats" />
+                </div>
+              </div>
+              <!--  /.col -->
+              <div class="col-md-3 col-sm-4">
+                <!-- small box -->
+                <div class="small-box bg-green visitor-box">
+                  <div class="inner text-center">
+                    <h3>{{ adminStats.visitorCount }}</h3>
+
+                    <p>Visitors</p>
+                  </div>
+                  <div class="icon text-center">
+                    <i class="ion ion-mouse" />
+                  </div>
+                </div>
+              </div>
+              <!--  /.col -->
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="statsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /VISITOR MAP -->
+      </div>
       <!-- /.col -->
     </div>
     <!-- /.row -->
