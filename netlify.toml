@@ -7,5 +7,5 @@
 
 [build]
   base    = "frontend"
-  publish = "frontend/dist"
+  publish = "dist"
   command = "npm install --only=dev && npm run build"
