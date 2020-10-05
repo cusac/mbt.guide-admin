@@ -1,9 +1,9 @@
 <template>
   <header class="main-header">
     <span class="logo-mini">
-      <a href="https://appyapp.io"
+      <a href="https://mbt-guide.netlify.app/"
         ><img
-          src="/static/img/white_logo_icon.svg"
+          src="/static/img/logo.svg"
           alt="Logo"
           class="img-responsive center-block logo"
       /></a>
