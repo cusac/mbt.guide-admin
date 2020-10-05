@@ -74,6 +74,58 @@
 
       <!-- Right col -->
       <div class="col-lg-4">
+        <!-- VIDEO PROGRESS -->
+        <box
+          :classes="['box-success']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Video Progress</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <div v-if="!segmentStatsLoading">
+                <div class="row">
+                  <div class="col-lg-6 text-center">
+                    <h4>Finished: {{ segmentStats[0].videosCompleted }}</h4>
+                  </div>
+                  <div class="col-lg-6 text-center">
+                    <h4>Total: {{ segmentStats[0].totalVideos }}</h4>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 text-center">
+                    <h3>
+                      Completion:
+                      {{
+                        Math.round(
+                          (segmentStats[0].videosCompleted / segmentStats[0].totalVideos) * 100
+                        )
+                      }}%
+                    </h3>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <canvas id="videoProgressGuage" />
+              </div>
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="segmentStatsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /VIDEO PROGRESS -->
+
         <!-- BROWSER USAGE -->
         <box
           :classes="['box-default']"
@@ -298,6 +350,7 @@ export default {
       client: null,
       adminStats: {},
       adminStatsLoading: true,
+      segmentStats: [],
       segmentStatsLoading: true,
     };
   },
@@ -364,6 +417,7 @@ export default {
         .then(result => {
           this.segmentStats = result;
           this.createSegmentCharts();
+          this.createVideoProgressChart();
           this.segmentStatsLoading = false;
         })
         .catch(error => {
@@ -439,6 +493,52 @@ export default {
       // - END PIE CHART -
       // -----------------
     },
+    createVideoProgressChart() {
+      var opts = {
+        angle: 0, // The span of the gauge arc
+        lineWidth: 0.2, // The line thickness
+        radiusScale: 0.89, // Relative radius
+        pointer: {
+          length: 0.54, // // Relative to gauge radius
+          strokeWidth: 0.053, // The thickness
+          color: '#000000', // Fill color
+        },
+        limitMax: false, // If false, max value increases automatically if value > maxValue
+        limitMin: false, // If true, the min value of the gauge will be fixed
+        colorStart: '#6FADCF', // Colors
+        colorStop: '#8FC0DA', // just experiment with them
+        strokeColor: '#E0E0E0', // to see which ones work best for you
+        generateGradient: true,
+        highDpiSupport: true, // High resolution support
+        staticLabels: {
+          font: '10px sans-serif', // Specifies font
+          labels: [
+            160,
+            320,
+            480,
+            640,
+            this.segmentStats[0].videosCompleted,
+            this.segmentStats[0].totalVideos,
+          ], // Print labels at these values
+          color: '#000000', // Optional: Label text color
+          fractionDigits: 0, // Optional: Numerical precision. 0=round off.
+        },
+        staticZones: [
+          { strokeStyle: '#ff0202', min: 0, max: 160, height: 0.6 }, // Red from 100 to 60
+          { strokeStyle: '#c86400', min: 160, max: 320, height: 0.8 }, // Yellow
+          { strokeStyle: '#969600', min: 320, max: 480, height: 1.0 }, // Green
+          { strokeStyle: '#64c803', min: 480, max: 640, height: 1.2 }, // Yellow
+          { strokeStyle: '#00ff06', min: 640, max: this.segmentStats[0].totalVideos, height: 1.4 }, // Red
+        ],
+      };
+      var target = document.getElementById('videoProgressGuage'); // your canvas element
+      // eslint-disable-next-line no-undef
+      var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+      gauge.maxValue = this.segmentStats[0].totalVideos; // set max gauge value
+      gauge.setMinValue(0); // Prefer setter over gauge.minValue = 0
+      gauge.animationSpeed = 50; // set animation speed (32 is default value)
+      gauge.set(this.segmentStats[0].videosCompleted); // set actual value
+    },
     createSegmentCharts() {
       // Get context with jQuery - using jQuery's .get() method.
       const segmentsCreatedData = this.segmentStats.map(s => {
@@ -451,6 +551,7 @@ export default {
 
       // eslint-disable-next-line no-undef
       var segmentsCreatedChartCanvas = $('#segmentsCreatedChart');
+      // eslint-disable-next-line no-undef
       var hoursProcessedChartCanvas = $('#hoursProcessedChart');
 
       let data = {
