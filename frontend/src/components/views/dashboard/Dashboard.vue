@@ -9,6 +9,62 @@
     <!--</div>-->
 
     <!-- Main row -->
+
+    <div class="row">
+      <div class="col-lg-6 col-lg-offset-3">
+        <!-- VIDEO PROGRESS -->
+        <box
+          :classes="['box-success']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Video Progress</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <div v-if="!segmentStatsLoading">
+                <div class="row">
+                  <div class="col-lg-6 text-center">
+                    <h3>Finished: {{ segmentStats[0].videosCompleted }}</h3>
+                  </div>
+                  <div class="col-lg-6 text-center">
+                    <h3>Total: {{ segmentStats[0].totalVideos }}</h3>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 text-center">
+                    <h2>
+                      Completion:
+                      {{
+                        Math.round(
+                          (segmentStats[0].videosCompleted / segmentStats[0].totalVideos) * 100
+                        )
+                      }}%
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <canvas id="videoProgressGuage" class="progress-guage" />
+              </div>
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="segmentStatsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /VIDEO PROGRESS -->
+      </div>
+    </div>
     <div class="row">
       <!-- Left col -->
       <div class="col-lg-8">
@@ -74,58 +130,6 @@
 
       <!-- Right col -->
       <div class="col-lg-4">
-        <!-- VIDEO PROGRESS -->
-        <box
-          :classes="['box-success']"
-          :can-collapse="true"
-          :can-close="true"
-          :disable-footer="true"
-          :header-border="true"
-          :no-padding="true"
-        >
-          <div slot="header">
-            <h3 class="box-title">Video Progress</h3>
-          </div>
-          <!-- /box-header -->
-
-          <div slot="body">
-            <div class="chart-responsive">
-              <div v-if="!segmentStatsLoading">
-                <div class="row">
-                  <div class="col-lg-6 text-center">
-                    <h4>Finished: {{ segmentStats[0].videosCompleted }}</h4>
-                  </div>
-                  <div class="col-lg-6 text-center">
-                    <h4>Total: {{ segmentStats[0].totalVideos }}</h4>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12 text-center">
-                    <h3>
-                      Completion:
-                      {{
-                        Math.round(
-                          (segmentStats[0].videosCompleted / segmentStats[0].totalVideos) * 100
-                        )
-                      }}%
-                    </h3>
-                  </div>
-                </div>
-              </div>
-              <div class="text-center">
-                <canvas id="videoProgressGuage" />
-              </div>
-            </div>
-          </div>
-          <!-- /box-body -->
-
-          <div v-if="segmentStatsLoading" class="overlay">
-            <i class="fa"><pulse-loader /></i>
-          </div>
-          <!-- /.overlay -->
-        </box>
-        <!-- /VIDEO PROGRESS -->
-
         <!-- BROWSER USAGE -->
         <box
           :classes="['box-default']"
@@ -497,7 +501,7 @@ export default {
       var opts = {
         angle: 0, // The span of the gauge arc
         lineWidth: 0.2, // The line thickness
-        radiusScale: 0.89, // Relative radius
+        radiusScale: 1, // Relative radius
         pointer: {
           length: 0.54, // // Relative to gauge radius
           strokeWidth: 0.053, // The thickness
@@ -672,6 +676,10 @@ export default {
 
 <style lang="scss">
 .dashboard {
+  .progress-guage {
+    height: 20vh;
+    width: 40vh;
+  }
   .users-list {
     & > li img {
       height: 128px;
