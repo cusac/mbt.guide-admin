@@ -68,6 +68,119 @@
     <div class="row">
       <!-- Left col -->
       <div class="col-lg-8">
+
+        <!-- SEGMENT VIEWS -->
+        <box
+          :classes="['box-success']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Total Segment Views</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <canvas id="segmentViewsChart" />
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="segmentStatsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /SEGMENT VIEWS -->
+
+        <!-- SEARCH COUNT -->
+        <box
+          :classes="['box-success']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Total Search Count</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <canvas id="searchCountChart" />
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="segmentStatsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /SEARCH COUNT -->
+
+        <!-- TOP VIEWED SEGMENTS -->
+        <box
+          :classes="['box-success']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Most Viewed Segments</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <canvas id="topViewedSegmentsChart" />
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="segmentStatsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /TOP VIEWED SEGMENTS -->
+
+        <!-- TOP SEARCH TERMS -->
+        <box
+          :classes="['box-success']"
+          :can-collapse="true"
+          :can-close="true"
+          :disable-footer="true"
+          :header-border="true"
+          :no-padding="true"
+        >
+          <div slot="header">
+            <h3 class="box-title">Top Search Terms</h3>
+          </div>
+          <!-- /box-header -->
+
+          <div slot="body">
+            <div class="chart-responsive">
+              <canvas id="topSearchTermsChart" />
+            </div>
+          </div>
+          <!-- /box-body -->
+
+          <div v-if="segmentStatsLoading" class="overlay">
+            <i class="fa"><pulse-loader /></i>
+          </div>
+          <!-- /.overlay -->
+        </box>
+        <!-- /TOP SEARCH TERMS -->
+
         <!-- SEGMENTS CREATED -->
         <box
           :classes="['box-warning']"
@@ -122,7 +235,7 @@
           </div>
           <!-- /.overlay -->
         </box>
-        <!-- /SEGMENTS CREATED -->
+        <!-- /HOURS PROCESSED -->
 
         <!-- /.row -->
       </div>
@@ -146,7 +259,7 @@
 
           <div slot="body">
             <div class="chart-responsive">
-              <canvas id="pieChart" height="185px" />
+              <canvas id="browserPieChart" height="185px" />
             </div>
           </div>
           <!-- /box-body -->
@@ -422,6 +535,7 @@ export default {
           this.segmentStats = result;
           this.createSegmentCharts();
           this.createVideoProgressChart();
+          this.createBarCharts();
           this.segmentStatsLoading = false;
         })
         .catch(error => {
@@ -432,9 +546,10 @@ export default {
     },
     createPieChart() {
       // -------------
-      // - PIE CHART -
+      // - PIE CHARTS -
       // -------------
       // Get context with jQuery - using jQuery's .get() method.
+      let data;
       let browsers = [];
       let visitors = [];
       let other = [];
@@ -444,7 +559,7 @@ export default {
       }
 
       // eslint-disable-next-line no-undef
-      var pieChartCanvas = $('#pieChart');
+      var browserPieChartCanvas = $('#browserPieChart');
 
       // 1) combine the arrays:
       let charData = [];
@@ -475,7 +590,7 @@ export default {
         browsers.push('Other');
       }
 
-      let data = {
+      data = {
         datasets: [
           {
             data: visitors,
@@ -488,7 +603,7 @@ export default {
       };
 
       // eslint-disable-next-line no-undef
-      new Chart(pieChartCanvas, {
+      new Chart(browserPieChartCanvas, {
         // eslint-disable-line no-new
         type: 'doughnut',
         data: data,
@@ -543,6 +658,7 @@ export default {
       gauge.animationSpeed = 50; // set animation speed (32 is default value)
       gauge.set(this.segmentStats[0].videosCompleted); // set actual value
     },
+    // TODO: Create a "make chart" function and re-use for each chart
     createSegmentCharts() {
       // Get context with jQuery - using jQuery's .get() method.
       const segmentsCreatedData = this.segmentStats.map(s => {
@@ -553,10 +669,26 @@ export default {
         return { x: new Date(s.createdAt), y: s.hoursProcessed };
       });
 
+      const segementViewsData = this.segmentStats
+        .filter(stat => !!stat.totalSegmentViews)
+        .map(s => {
+          return { x: new Date(s.createdAt), y: s.totalSegmentViews };
+        });
+
+      const searchCountData = this.segmentStats
+        .filter(stat => !!stat.totalSearches)
+        .map(s => {
+          return { x: new Date(s.createdAt), y: s.totalSearches };
+        });
+
       // eslint-disable-next-line no-undef
       var segmentsCreatedChartCanvas = $('#segmentsCreatedChart');
       // eslint-disable-next-line no-undef
       var hoursProcessedChartCanvas = $('#hoursProcessedChart');
+      // eslint-disable-next-line no-undef
+      var segmentViewsChartCanvas = $('#segmentViewsChart');
+      // eslint-disable-next-line no-undef
+      var searchCountChartCanvas = $('#searchCountChart');
 
       let data = {
         datasets: [
@@ -668,6 +800,265 @@ export default {
             ],
           },
         },
+      });
+
+      data = {
+        datasets: [
+          {
+            data: segementViewsData,
+            fill: true,
+            label: 'Segment Views',
+            borderColor: '#f56954',
+            backgroundColor: '#f56954',
+            lineTension: 0,
+            pointRadius: 0,
+            showLine: true,
+            pointHoverBackgroundColor: '#ffffff',
+            pointHoverRadius: '7',
+          },
+        ],
+      };
+
+      // eslint-disable-next-line no-undef
+      new Chart(segmentViewsChartCanvas, {
+        // eslint-disable-line no-new
+        type: 'line',
+        data: data,
+        options: {
+          tooltips: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          hover: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                type: 'time',
+                time: {
+                  unit: 'day',
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Segment Views',
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      data = {
+        datasets: [
+          {
+            data: segementViewsData,
+            fill: true,
+            label: 'Segment Views',
+            borderColor: '#f56954',
+            backgroundColor: '#f56954',
+            lineTension: 0,
+            pointRadius: 0,
+            showLine: true,
+            pointHoverBackgroundColor: '#ffffff',
+            pointHoverRadius: '7',
+          },
+        ],
+      };
+
+      // eslint-disable-next-line no-undef
+      new Chart(segmentViewsChartCanvas, {
+        // eslint-disable-line no-new
+        type: 'line',
+        data: data,
+        options: {
+          tooltips: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          hover: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                type: 'time',
+                time: {
+                  unit: 'day',
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Segment Views',
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      data = {
+        datasets: [
+          {
+            data: searchCountData,
+            fill: true,
+            label: 'Search Count',
+            borderColor: '#d2d6df',
+            backgroundColor: '#d2d6df',
+            lineTension: 0,
+            pointRadius: 0,
+            showLine: true,
+            pointHoverBackgroundColor: '#ffffff',
+            pointHoverRadius: '7',
+          },
+        ],
+      };
+
+      // eslint-disable-next-line no-undef
+      new Chart(searchCountChartCanvas, {
+        // eslint-disable-line no-new
+        type: 'line',
+        data: data,
+        options: {
+          tooltips: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          hover: {
+            mode: 'x-axis',
+            intersect: false,
+          },
+          scales: {
+            xAxes: [
+              {
+                type: 'time',
+                time: {
+                  unit: 'day',
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Search Count',
+                },
+              },
+            ],
+          },
+        },
+      });
+    },
+    createBarCharts() {
+      let data;
+      // Get context with jQuery - using jQuery's .get() method.
+      const topViewedSegments = this.segmentStats[0].topViewedSegments;
+
+      const topViewedSegmentsCount = topViewedSegments.map(s => s.views);
+      const topViewedSegmentsLabels = topViewedSegments.map(s => s.title);
+
+      const topSearchTerms = this.segmentStats[0].topSearchTerms;
+
+      const topSearchTermsCount = topSearchTerms.map(s => s.queryCount);
+      const topSearchTermsLabels = topSearchTerms.map(s => s.term);
+
+      // eslint-disable-next-line no-undef
+      var topViewedSegmentsChartCanvas = $('#topViewedSegmentsChart');
+      // eslint-disable-next-line no-undef
+      var topSearchTermsChartCanvas = $('#topSearchTermsChart');
+
+      data = {
+        labels: topViewedSegmentsLabels,
+        datasets: [
+          {
+            data: topViewedSegmentsCount,
+            fill: true,
+            label: 'Segment Views',
+            borderColor: '#fe8b36',
+            backgroundColor: '#fe8b36',
+          },
+        ],
+      };
+
+      // eslint-disable-next-line no-undef
+      new Chart(topViewedSegmentsChartCanvas, {
+        // eslint-disable-line no-new
+        type: 'bar',
+        data: data,
+        options: {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
+          },
+        },
+      });
+
+      let options = {
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem) {
+              return `Query Count: ${tooltipItem.value} \n isTag: ${
+                topSearchTerms[tooltipItem.index].isTag
+              }`;
+            },
+          },
+        },
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+              },
+            },
+          ],
+        },
+      };
+
+      data = {
+        labels: topSearchTermsLabels,
+        datasets: [
+          {
+            data: topSearchTermsCount,
+            fill: true,
+            label: 'Query Count',
+            borderColor: '#00a65a',
+            backgroundColor: '#00a65a',
+          },
+        ],
+      };
+
+      // eslint-disable-next-line no-undef
+      new Chart(topSearchTermsChartCanvas, {
+        // eslint-disable-line no-new
+        type: 'bar',
+        data: data,
+        options: options,
       });
     },
   },
