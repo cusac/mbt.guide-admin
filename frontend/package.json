@@ -23,7 +23,7 @@
     ]
   },
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": "^0.21.2",
     "babel-runtime": "^5.8.0",
     "change-case": "^3.0.1",
     "chart.js": "2.3.0",
