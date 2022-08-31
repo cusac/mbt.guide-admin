@@ -41,7 +41,7 @@
     "querystring": "^0.2.0",
     "sweetalert2": "^7.0.9",
     "v-tooltip": "^2.0.0-rc.26",
-    "validator": "^9.1.2",
+    "validator": "^13.7.0",
     "vue": "^2.5.16",
     "vue-carousel-3d": "^0.1.19",
     "vue-croppa": "^1.1.4",
