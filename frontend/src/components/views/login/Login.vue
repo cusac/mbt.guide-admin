@@ -117,6 +117,20 @@ export default {
   mounted() {
     this.setAuthUI();
     this.startAuthUI();
+    const timer = setInterval(() => {
+      const submitButton = document.getElementsByClassName('firebaseui-id-submit')[0];
+      const emailInput = document.getElementsByClassName('firebaseui-id-email')[0];
+      const passwordInput = document.getElementsByClassName('firebaseui-id-password')[0];
+      if (submitButton && submitButton.innerHTML === "Sign In") {
+        clearInterval(timer)
+        submitButton.onclick = async e => {
+          if (testUsers.includes(emailInput.value)) {
+            e.stopPropagation();
+            this.login({ email: emailInput.value, password: passwordInput.value });
+          }
+        };
+      }
+    }, 500)
   },
   created() {
     this.email = this.$route.query.email || '';
