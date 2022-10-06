@@ -47,6 +47,17 @@
           <span class="page">Audit Logs</span>
         </a>
       </router-link>
+      <router-link
+        v-permission.enable="['tag', 'readTag']"
+        tag="li"
+        class="pageLink"
+        to="/tags"
+      >
+        <a>
+          <i class="fa fa-book" />
+          <span class="page">Tags</span>
+        </a>
+      </router-link>
     </div>
 
     <div class="sidebar-menu">
