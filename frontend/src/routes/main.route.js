@@ -15,6 +15,8 @@ import documentRoutes from './documents.route';
 import imageRoutes from './images.route';
 
 import auditLogRoutes from './audit-logs.route';
+import tagRoutes from './tags.route';
+
 
 const routes = [
   {
@@ -51,6 +53,7 @@ const routes = [
       ...documentRoutes,
       ...imageRoutes,
       ...auditLogRoutes,
+      ...tagRoutes,
     ],
   },
 ];

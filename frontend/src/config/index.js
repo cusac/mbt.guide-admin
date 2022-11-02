@@ -76,6 +76,9 @@ export const resources = {
   visitor: {
     alias: 'visitor',
   },
+  tag: {
+    alias: 'tag',
+  },
   role: {
     alias: 'role',
     associations: {
