@@ -3,7 +3,7 @@
     <div class="box box-primary box-solid">
       <div class="box-body">
         <v-server-table
-          ref="tagTable"
+          ref="tagDetailsTable"
           url=""
           :columns="columns"
           :options="options"
@@ -27,18 +27,19 @@
 </template>
 
 <script>
-import { REQUIRED_PASSWORD_STRENGTH } from '../../../config';
 
+import { tagmatchService } from '../../../services';
+// import { EVENTS } from '../../../config';
 export default {
   name: 'Tags',
   data() {
     return {
       loading: null,
       tagTable: null,
-      columns: ['name', 'segmentCount','edit'],
+      columns: ['target', 'rating','segmentCount'],
       options: {
         highlightMatches: true,
-        sortable: ['name', 'segmentCount'],
+        sortable: ['target', 'rating', 'segmentCount'],
         requestFunction: request => {
           const params = {};
           params.$page = request.page;
@@ -46,18 +47,24 @@ export default {
           if (request.orderBy) {
             params.$sort = request.ascending ? '-' + request.orderBy : request.orderBy;
           }
+          alert('request:' + JSON.stringify(request));
+          alert('request.$term:' + request.$term);
+          alert('this.$page:' + JSON.stringify(this.$page));
+        
           if (request.query) {
             params.$term = request.query;
           }
           this.loading = true;
-          return this.$tagRepository.list(params).catch(error => {
-            console.error('Tags.requestFunction-error:', error);
-            this.$snotify.error('Get tags failed', 'Error!');
+          return tagmatchService.getMatchingTags('pain').catch(error => {
+            console.error('TagDetails.requestFunction-error:', error);
+            this.$snotify.error('Get tag details failed', 'Error!');
           });
         },
         responseAdapter: response => {
+          //alert('resonse datails: ' + JSON.stringify(response));
+          //alert('response.data.length:' + response.data.length);
           this.loading = false;
-          return { data: response.data.docs, count: response.data.items.total };
+          return { data: response.data, count: response.data.length };
         },
         uniqueKey: '_id',
       },
@@ -80,7 +87,9 @@ export default {
       this.tagTable = this.$refs.tagTable;
     },
     edit(row) {
-      this.$router.push({path: '/tagdetails', name: 'TagDetails', query: {tag: row.name }});
+      //alert('row._id: ' + row._id);
+      //alert('JSON.stringify(row):' + JSON.stringify(row));
+      //this.$router.push({path: '/tagdetails', name: 'TagDetails', params: { _id: row.name }, props: row });
     },
   },
 };
