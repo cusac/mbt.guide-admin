@@ -12,3 +12,4 @@ export { default as eventBus } from './event-bus.service';
 export { default as fileService } from './file.service';
 export { default as chatService } from './chat.service';
 export { default as statsService } from './stats.service';
+export { default as tagmatchService } from './tagmatch.service';
